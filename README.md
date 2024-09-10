@@ -1,2 +1,13 @@
 # HCAEC-and-HITAEC-treated-with-calciprotein-particles
-This repository has three files that are necessary to reproduce statistical analysis of proteomics data from  Shishkova et al., 2024 "Proteomic profiling of endothelial cell secretome after exposure to calciprotein particles reveals specific markers of pro-inflammatory activation"
+This repository has three files that are necessary to reproduce statistical analysis of proteomics data from  Stepanov et al., 2024 "Proteomic profiling of endothelial cell secretome after exposure to calciprotein particles reveals downregulation of basement membrane assembly and increased release of soluble CD59"
+
+Files list:
+
+R code (code_secretome_xxx.r):
+   131-141 - HCAEC samples
+   142-153 - HITAEC samples
+   131-153 - HITAEC+HCAEC samples
+   131-135_vs_142-147 - HCAEC ctrl vs HITAEC ctrl
+Results of protein identification for two cell types - output of MSFragger in tsv format (proteins_131-153.tsv)
+Legends to data in excel format (sample_info_xxx.xlsx)
+Global legend in excel format(register.xlsx)
