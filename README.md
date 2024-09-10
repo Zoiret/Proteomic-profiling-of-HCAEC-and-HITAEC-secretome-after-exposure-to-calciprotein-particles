@@ -4,10 +4,11 @@ This repository has three files that are necessary to reproduce statistical anal
 Files list:
 
 R code (code_secretome_xxx.r):
-   131-141 - HCAEC samples
-   142-153 - HITAEC samples
-   131-153 - HITAEC+HCAEC samples
-   131-135_vs_142-147 - HCAEC ctrl vs HITAEC ctrl
-Results of protein identification for two cell types - output of MSFragger in tsv format (proteins_131-153.tsv)
+   _131-141 - HCAEC samples
+   _142-153 - HITAEC samples
+   _131-153 - HITAEC+HCAEC samples
+   _131-135_vs_142-147 - HCAEC ctrl vs HITAEC ctrl
+Results of protein identification - output of MSFragger in .tsv format (proteins_131-153.tsv)
+Results of protein identification for two cell types - output of Peaks XPro in .csv format (proteins_HCA.csv and proteins_HIT.csv) from https://github.com/ArseniyLobov/hcaec-and-hitaec-treated-with-calciprotein-particles
 Legends to data in excel format (sample_info_xxx.xlsx)
 Global legend in excel format(register.xlsx)
