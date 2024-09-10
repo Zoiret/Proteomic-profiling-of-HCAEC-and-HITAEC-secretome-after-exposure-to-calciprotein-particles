@@ -1,5 +1,5 @@
 # HCAEC-and-HITAEC-treated-with-calciprotein-particles
-This repository has three files that are necessary to reproduce statistical analysis of proteomics data from  Stepanov et al., 2024 "Proteomic profiling of endothelial cell secretome after exposure to calciprotein particles reveals downregulation of basement membrane assembly and increased release of soluble CD59"
+This repository has all files that are necessary to reproduce statistical analysis of proteomics data from  Stepanov et al., 2024 "Proteomic profiling of endothelial cell secretome after exposure to calciprotein particles reveals downregulation of basement membrane assembly and increased release of soluble CD59"
 
 Files list:
 
