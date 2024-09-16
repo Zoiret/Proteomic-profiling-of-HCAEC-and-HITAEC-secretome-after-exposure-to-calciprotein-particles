@@ -9,6 +9,6 @@ R code (code_secretome_xxx.r):
    _131-153 - HITAEC+HCAEC samples
    _131-135_vs_142-147 - HCAEC ctrl vs HITAEC ctrl
 Results of protein identification - output of MSFragger in .tsv format (proteins_131-153.tsv)
-Results of protein identification for two cell types - output of Peaks XPro in .csv format (proteins_HCA.csv and proteins_HIT.csv) from https://github.com/ArseniyLobov/hcaec-and-hitaec-treated-with-calciprotein-particles
+Results of protein identification for two cell types - output of Peaks XPro in .csv format (proteins_HCA.csv and proteins_HIT.csv) from https://doi.org/10.3390/jcdd11010005
 Legends to data in excel format (sample_info_xxx.xlsx)
 Global legend in excel format(register.xlsx)
