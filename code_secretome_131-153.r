@@ -82,7 +82,7 @@ dat <- data.frame(read.delim("proteins_131-153.tsv"))
       geom_smooth(mapping = aes(x = part, y = HCA, colour = "HCA")) + 
       geom_line(mapping = aes(x = part, y = HCA, colour = "HCA")) +
       geom_vline(xintercept = 600) +
-      xlab("Decline NA") + ylab("Detected proteins") +
+      xlab("Decline NA (‰)") + ylab("Detected proteins") +
       scale_x_continuous(breaks = seq(0, 1000, 100)) +
       scale_y_continuous(breaks = seq(0, 3000, 500)) +
       labs(subtitle="Dependence of the number of detectable proteins on decline NA (all HCA + all HIT)")
@@ -250,7 +250,7 @@ ggvenn(vennn3,
 
 #Quantitative analysis
 
-  dat2 <- dat1[which(rowMeans(!is.na(dat1)) >= 0.71),] #filtration data according to the above algorithm
+  dat2 <- dat1[which(rowMeans(!is.na(dat1)) >= 0.7),] #filtration data according to the above algorithm
   mean(complete.cases(dat2))
   NAsums <- data.frame(colSums(is.na(dat2))) #detection NA in experimental sample
   NAsums 
@@ -454,6 +454,21 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
          border_color = "black",
          color = colorRampPalette(c('#005aeb', '#240935', '#800080', '#b300b3',"#e600e6"))(100))
 
+
+  pph <- rownames(head(full_list_efit3[order(full_list_efit3$logFC,decreasing = T),],n=50)) #rownames of top50 overexpression proteins
+  length(pph)
+  
+pheatmap(dat_norm2[pph,], #heatmap of top50 overexpression proteins (experimentally)
+         annotation_col = fact[,c(2,5)],
+         cutree_cols = 2,
+         cluster_cols = FALSE,
+         cluster_rows = TRUE,
+         cellwidth = 12,
+         cellheight = 10,
+         border_color = "black",
+         color = colorRampPalette(c("#00bfff", '#005aeb', '#240935', '#800080','#cd00cd',"#ff19ff"))(100))
+
+
   #the spread of legend values
   min(dat_norm2[prot_for_heatmap,])
   max(dat_norm2[prot_for_heatmap,])
@@ -495,21 +510,21 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
                                      'Protein',
                                      'UNIPROT',
                                      'Peptides',
-                                     'Area HCA C 2','Area HCA C 4','Area HCA C 6','Area HCA I 2','Area HCA I 4','Area HCA I 6','Area HCA K 2','Area HCA K 4','Area HCA M 2','Area HCA M 6',
-                                     'Area HIT C 2','Area HIT C 4','Area HIT C 6','Area HIT I 2','Area HIT I 4','Area HIT I 6','Area HIT K 2','Area HIT K 4','Area HIT K 6','Area HIT M 2','Area HIT M 4','Area HIT M 6',
-                                     'Count HCA C 2','Count HCA C 4','Count HCA C 6','Count HCA I 2','Count HCA I 4','Count HCA I 6','Count HCA K 2','Count HCA K 4','Count HCA M 2','Count HCA M 6',
-                                     'Count HIT C 2','Count HIT C 4','Count HIT C 6','Count HIT I 2','Count HIT I 4','Count HIT I 6','Count HIT K 2','Count HIT K 4','Count HIT K 6','Count HIT M 2','Count HIT M 4','Count HIT M 6')
+                                     'Area HCAEC CPP-P 2','Area HCAEC CPP-P 4','Area HCAEC CPP-P 6','Area HCAEC CPP-S 2','Area HCAEC CPP-S 4','Area HCAEC CPP-S 6','Area HCAEC DPBS 2','Area HCAEC DPBS 4','Area HCAEC MPP 2','Area HCAEC MPP 6',
+                                     'Area HITAEC CPP-P 2','Area HITAEC CPP-P 4','Area HITAEC CPP-P 6','Area HITAEC CPP-S 2','Area HITAEC CPP-S 4','Area HITAEC CPP-S 6','Area HITAEC DPBS 2','Area HITAEC DPBS 4','Area HITAEC DPBS 6','Area HITAEC MPP 2','Area HITAEC MPP 4','Area HITAEC MPP 6',
+                                     'Count HCAEC CPP-P 2','Count HCAEC CPP-P 4','Count HCAEC CPP-P 6','Count HCAEC CPP-S 2','Count HCAEC CPP-S 4','Count HCAEC CPP-S 6','Count HCAEC DPBS 2','Count HCAEC DPBS 4','Count HCAEC MPP 2','Count HCAEC MPP 6',
+                                     'Count HITAEC CPP-P 2','Count HITAEC CPP-P 4','Count HITAEC CPP-P 6','Count HITAEC CPP-S 2','Count HITAEC CPP-S 4','Count HITAEC CPP-S 6','Count HITAEC DPBS 2','Count HITAEC DPBS 4','Count HITAEC DPBS 6','Count HITAEC MPP 2','Count HITAEC MPP 4','Count HITAEC MPP 6')
   colnames(Uniq_prot_proteome) <- c('Gene name',
                                     'Protein',
                                     'UNIPROT',
-                                    'Peptides HCA','Peptides HIT',
-                                    'Area HCA C 2','Area HCA C 4','Area HCA C 6','Area HCA I 2','Area HCA I 4','Area HCA I 6','Area HCA K 2','Area HCA K 4','Area HCA K 6','Area HCA M 2','Area HCA M 4','Area HCA M 6',
-                                    'Area HIT C 2','Area HIT C 4','Area HIT C 6','Area HIT I 2','Area HIT I 4','Area HIT I 6','Area HIT K 2','Area HIT K 4','Area HIT K 6','Area HIT M 2','Area HIT M 4','Area HIT M 6',
-                                    'Count HCA C 2','Count HCA C 4','Count HCA C 6','Count HCA I 2','Count HCA I 4','Count HCA I 6','Count HCA K 2','Count HCA K 4','Count HCA K 6','Count HCA M 2','Count HCA M 4','Count HCA M 6',
-                                    'Count HIT C 2','Count HIT C 4','Count HIT C 6','Count HIT I 2','Count HIT I 4','Count HIT I 6','Count HIT K 2','Count HIT K 4','Count HIT K 6','Count HIT M 2','Count HIT M 4','Count HIT M 6')
+                                    'Peptides HCAEC','Peptides HITAEC',
+                                    'Area HCAEC CPP-P 2','Area HCAEC CPP-P 4','Area HCAEC CPP-P 6','Area HCAEC CPP-S 2','Area HCAEC CPP-S 4','Area HCAEC CPP-S 6','Area HCAEC DPBS 2','Area HCAEC DPBS 4','Area HCAEC DPBS 6','Area HCAEC MPP 2','Area HCAEC MPP 4','Area HCAEC MPP 6',
+                                    'Area HITAEC CPP-P 2','Area HITAEC CPP-P 4','Area HITAEC CPP-P 6','Area HITAEC CPP-S 2','Area HITAEC CPP-S 4','Area HITAEC CPP-S 6','Area HITAEC DPBS 2','Area HITAEC DPBS 4','Area HITAEC DPBS 6','Area HITAEC MPP 2','Area HITAEC MPP 4','Area HITAEC MPP 6',
+                                    'Count HCAEC CPP-P 2','Count HCAEC CPP-P 4','Count HCAEC CPP-P 6','Count HCAEC CPP-S 2','Count HCAEC CPP-S 4','Count HCAEC CPP-S 6','Count HCAEC DPBS 2','Count HCAEC DPBS 4','Count HCAEC DPBS 6','Count HCAEC MPP 2','Count HCAEC MPP 4','Count HCAEC MPP 6',
+                                    'Count HITAEC CPP-P 2','Count HITAEC CPP-P 4','Count HITAEC CPP-P 6','Count HITAEC CPP-S 2','Count HITAEC CPP-S 4','Count HITAEC CPP-S 6','Count HITAEC DPBS 2','Count HITAEC DPBS 4','Count HITAEC DPBS 6','Count HITAEC MPP 2','Count HITAEC MPP 4','Count HITAEC MPP 6')
   
   Uniq_prot_secretome_exp_HIT <- Uniq_prot_secretome[(rowSums(!is.na(Uniq_prot_secretome[,15:20])) == 6) & #HIT exp
-                                   (rowSums(!is.na(Uniq_prot_secretome[,21:26])) == 0), -c(5:14,27:36)] #HIT ctrl and delete HCA
+                                   (rowSums(!is.na(Uniq_prot_secretome[,21:26])) == 0), -c(5:14,27:36)] #HITAEC Ctrl and delete HCA
   
   Uniq_prot_secretome_ctrl_HIT <- Uniq_prot_secretome[(rowSums(!is.na(Uniq_prot_secretome[,21:26])) == 6) & 
                                     (rowSums(!is.na(Uniq_prot_secretome[,15:20])) == 0), -c(4:13,27:36)]
@@ -531,34 +546,38 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
   Uniq_prot_secretome[is.na(Uniq_prot_secretome)] <- 0 # NAs to 0 for correct correlation analyse
   Uniq_prot_proteome[is.na(Uniq_prot_proteome)] <- 0
   
+  {
   Uniq_prot_areas_proteome <- Uniq_prot_proteome[1:3]
-    Uniq_prot_areas_proteome$'MeanArea HCA C' <- rowMeans(Uniq_prot_proteome[,c(6:8)])
-    Uniq_prot_areas_proteome$'MeanArea HCA I' <- rowMeans(Uniq_prot_proteome[,c(9:11)])
-    Uniq_prot_areas_proteome[['MeanArea HCA C+I']] <- rowMeans(Uniq_prot_proteome[,c(6:11)])
-    Uniq_prot_areas_proteome$'MeanArea HCA K' <- rowMeans(Uniq_prot_proteome[,c(12:14)])
-    Uniq_prot_areas_proteome$'MeanArea HCA M' <- rowMeans(Uniq_prot_proteome[,c(15:17)])
-    Uniq_prot_areas_proteome[['MeanArea HCA K+M']] <- rowMeans(Uniq_prot_proteome[,c(12:17)])
-    Uniq_prot_areas_proteome$'MeanArea HIT C' <- rowMeans(Uniq_prot_proteome[,c(18:20)])
-    Uniq_prot_areas_proteome$'MeanArea HIT I' <- rowMeans(Uniq_prot_proteome[,c(21:23)])
-    Uniq_prot_areas_proteome[['MeanArea HIT C+I']] <- rowMeans(Uniq_prot_proteome[,c(18:23)])
-    Uniq_prot_areas_proteome$'MeanArea HIT K' <- rowMeans(Uniq_prot_proteome[,c(24:26)])
-    Uniq_prot_areas_proteome$'MeanArea HIT M' <- rowMeans(Uniq_prot_proteome[,c(27:29)])
-    Uniq_prot_areas_proteome[['MeanArea HIT K+M']] <- rowMeans(Uniq_prot_proteome[,c(24:29)])
+    Uniq_prot_areas_proteome$'MeanArea HCAEC CPP-P' <- rowMeans(Uniq_prot_proteome[,c(6:8)])
+    Uniq_prot_areas_proteome$'MeanArea HCAEC CPP-S' <- rowMeans(Uniq_prot_proteome[,c(9:11)])
+    Uniq_prot_areas_proteome[['MeanArea HCAEC (CPP-P + CPP-S)']] <- rowMeans(Uniq_prot_proteome[,c(6:11)])
+    Uniq_prot_areas_proteome$'MeanArea HCAEC DPBS' <- rowMeans(Uniq_prot_proteome[,c(12:14)])
+    Uniq_prot_areas_proteome$'MeanArea HCAEC MPP' <- rowMeans(Uniq_prot_proteome[,c(15:17)])
+    Uniq_prot_areas_proteome[['MeanArea HCAEC (DPBS + MPP)']] <- rowMeans(Uniq_prot_proteome[,c(12:17)])
+    Uniq_prot_areas_proteome$'MeanArea HITAEC CPP-P' <- rowMeans(Uniq_prot_proteome[,c(18:20)])
+    Uniq_prot_areas_proteome$'MeanArea HITAEC CPP-S' <- rowMeans(Uniq_prot_proteome[,c(21:23)])
+    Uniq_prot_areas_proteome[['MeanArea HITAEC (CPP-P + CPP-S)']] <- rowMeans(Uniq_prot_proteome[,c(18:23)])
+    Uniq_prot_areas_proteome$'MeanArea HITAEC DPBS' <- rowMeans(Uniq_prot_proteome[,c(24:26)])
+    Uniq_prot_areas_proteome$'MeanArea HITAEC MPP' <- rowMeans(Uniq_prot_proteome[,c(27:29)])
+    Uniq_prot_areas_proteome[['MeanArea HITAEC (DPBS + MPP)']] <- rowMeans(Uniq_prot_proteome[,c(24:29)])
+  }
   
+  {
   Uniq_prot_areas_secretome <- Uniq_prot_secretome[1:3]
-    Uniq_prot_areas_secretome$'MeanArea HCA C' <- rowMeans(Uniq_prot_secretome[,c(5:7)])
-    Uniq_prot_areas_secretome$'MeanArea HCA I' <- rowMeans(Uniq_prot_secretome[,c(8:10)])
-    Uniq_prot_areas_secretome[['MeanArea HCA C+I']] <- rowMeans(Uniq_prot_secretome[,c(5:10)])
-    Uniq_prot_areas_secretome$'MeanArea HCA K' <- rowMeans(Uniq_prot_secretome[,c(11:12)])
-    Uniq_prot_areas_secretome$'MeanArea HCA M' <- rowMeans(Uniq_prot_secretome[,c(13:14)])
-    Uniq_prot_areas_secretome[['MeanArea HCA K+M']] <- rowMeans(Uniq_prot_secretome[,c(11:14)])
-    Uniq_prot_areas_secretome$'MeanArea HIT C' <- rowMeans(Uniq_prot_secretome[,c(15:17)])
-    Uniq_prot_areas_secretome$'MeanArea HIT I' <- rowMeans(Uniq_prot_secretome[,c(18:20)])
-    Uniq_prot_areas_secretome[['MeanArea HIT C+I']] <- rowMeans(Uniq_prot_secretome[,c(15:20)])
-    Uniq_prot_areas_secretome$'MeanArea HIT K' <- rowMeans(Uniq_prot_secretome[,c(21:23)])
-    Uniq_prot_areas_secretome$'MeanArea HIT M' <- rowMeans(Uniq_prot_secretome[,c(24:26)])
-    Uniq_prot_areas_secretome[['MeanArea HIT K+M']] <-rowMeans(Uniq_prot_secretome[,c(21:26)])
-
+    Uniq_prot_areas_secretome$'MeanArea HCAEC CPP-P' <- rowMeans(Uniq_prot_secretome[,c(5:7)])
+    Uniq_prot_areas_secretome$'MeanArea HCAEC CPP-S' <- rowMeans(Uniq_prot_secretome[,c(8:10)])
+    Uniq_prot_areas_secretome[['MeanArea HCAEC (CPP-P + CPP-S)']] <- rowMeans(Uniq_prot_secretome[,c(5:10)])
+    Uniq_prot_areas_secretome$'MeanArea HCAEC DPBS' <- rowMeans(Uniq_prot_secretome[,c(11:12)])
+    Uniq_prot_areas_secretome$'MeanArea HCAEC MPP' <- rowMeans(Uniq_prot_secretome[,c(13:14)])
+    Uniq_prot_areas_secretome[['MeanArea HCAEC (DPBS + MPP)']] <- rowMeans(Uniq_prot_secretome[,c(11:14)])
+    Uniq_prot_areas_secretome$'MeanArea HITAEC CPP-P' <- rowMeans(Uniq_prot_secretome[,c(15:17)])
+    Uniq_prot_areas_secretome$'MeanArea HITAEC CPP-S' <- rowMeans(Uniq_prot_secretome[,c(18:20)])
+    Uniq_prot_areas_secretome[['MeanArea HITAEC (CPP-P + CPP-S)']] <- rowMeans(Uniq_prot_secretome[,c(15:20)])
+    Uniq_prot_areas_secretome$'MeanArea HITAEC DPBS' <- rowMeans(Uniq_prot_secretome[,c(21:23)])
+    Uniq_prot_areas_secretome$'MeanArea HITAEC MPP' <- rowMeans(Uniq_prot_secretome[,c(24:26)])
+    Uniq_prot_areas_secretome[['MeanArea HITAEC (DPBS + MPP)']] <-rowMeans(Uniq_prot_secretome[,c(21:26)])
+  }
+    
   prot_heatmap <- c('P13987','P14174','Q03135','P08962','Q14254',          #over
                     'P09486','P98160','P02751','P01033','P07942','Q16363', #membrane
                     'P11047','Q9Y4K0','P14543','P35555','O00468','P08572',
@@ -577,46 +596,50 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
   
   all_protein <- merge(Uniq_prot_secretome[,c(1:3,5:26)], Uniq_prot_proteome[,c(1:3,6:29)], by = c('Gene name','Protein','UNIPROT'))
   
-  
+  {
   all_protein_means <- all_protein[,c(1:3)]
-    all_protein_means$'Secr meanArea HCA C' <- rowMeans(all_protein[,c(4:6)])
-    all_protein_means$'Secr meanArea HCA I' <- rowMeans(all_protein[,c(7:9)])
-    all_protein_means$'Secr meanArea HCA C+I' <- rowMeans(all_protein[,c(4:9)])
-    all_protein_means$'Secr meanArea HCA K' <- rowMeans(all_protein[,c(10:11)])
-    all_protein_means$'Secr meanArea HCA M' <- rowMeans(all_protein[,c(12:13)])
-    all_protein_means$'Secr meanArea HCA K+M' <- rowMeans(all_protein[,c(10:13)])
-    all_protein_means$'Secr meanArea HIT C' <- rowMeans(all_protein[,c(14:16)])
-    all_protein_means$'Secr meanArea HIT I' <- rowMeans(all_protein[,c(17:19)])
-    all_protein_means$'Secr meanArea HIT C+I' <- rowMeans(all_protein[,c(14:19)])
-    all_protein_means$'Secr meanArea HIT K' <- rowMeans(all_protein[,c(20:22)])
-    all_protein_means$'Secr meanArea HIT M' <- rowMeans(all_protein[,c(23:25)])
-    all_protein_means$'Secr meanArea HIT K+M' <- rowMeans(all_protein[,c(20:25)])
+    all_protein_means$'Secr meanArea HCAEC CPP-P' <- rowMeans(all_protein[,c(4:6)])
+    all_protein_means$'Secr meanArea HCAEC CPP-S' <- rowMeans(all_protein[,c(7:9)])
+    all_protein_means$'Secr meanArea HCAEC (CPP-P + CPP-S)' <- rowMeans(all_protein[,c(4:9)])
+    all_protein_means$'Secr meanArea HCAEC DPBS' <- rowMeans(all_protein[,c(10:11)])
+    all_protein_means$'Secr meanArea HCAEC MPP' <- rowMeans(all_protein[,c(12:13)])
+    all_protein_means$'Secr meanArea HCAEC (DPBS + MPP)' <- rowMeans(all_protein[,c(10:13)])
+    all_protein_means$'Secr meanArea HITAEC CPP-P' <- rowMeans(all_protein[,c(14:16)])
+    all_protein_means$'Secr meanArea HITAEC CPP-S' <- rowMeans(all_protein[,c(17:19)])
+    all_protein_means$'Secr meanArea HITAEC (CPP-P + CPP-S)' <- rowMeans(all_protein[,c(14:19)])
+    all_protein_means$'Secr meanArea HITAEC DPBS' <- rowMeans(all_protein[,c(20:22)])
+    all_protein_means$'Secr meanArea HITAEC MPP' <- rowMeans(all_protein[,c(23:25)])
+    all_protein_means$'Secr meanArea HITAEC (DPBS + MPP)' <- rowMeans(all_protein[,c(20:25)])
     all_protein_means$'Secr meanArea' <- rowMeans(all_protein[,c(4:25)])
-    all_protein_means$'Prot meanArea HCA C' <- rowMeans(all_protein[,c(26:28)])
-    all_protein_means$'Prot meanArea HCA I' <- rowMeans(all_protein[,c(29:31)])
-    all_protein_means$'Prot meanArea HCA C+I' <- rowMeans(all_protein[,c(26:31)])
-    all_protein_means$'Prot meanArea HCA K' <- rowMeans(all_protein[,c(32:34)])
-    all_protein_means$'Prot meanArea HCA M' <- rowMeans(all_protein[,c(35:37)])
-    all_protein_means$'Prot meanArea HCA K+M' <- rowMeans(all_protein[,c(32:37)])
-    all_protein_means$'Prot meanArea HIT C' <- rowMeans(all_protein[,c(38:40)])
-    all_protein_means$'Prot meanArea HIT I' <- rowMeans(all_protein[,c(41:43)])
-    all_protein_means$'Prot meanArea HIT C+I' <- rowMeans(all_protein[,c(38:43)])
-    all_protein_means$'Prot meanArea HIT K' <- rowMeans(all_protein[,c(44:46)])
-    all_protein_means$'Prot meanArea HIT M' <- rowMeans(all_protein[,c(47:49)])
-    all_protein_means$'Prot meanArea HIT K+M' <- rowMeans(all_protein[,c(44:49)])
+    all_protein_means$'Prot meanArea HCAEC CPP-P' <- rowMeans(all_protein[,c(26:28)])
+    all_protein_means$'Prot meanArea HCAEC CPP-S' <- rowMeans(all_protein[,c(29:31)])
+    all_protein_means$'Prot meanArea HCAEC (CPP-P + CPP-S)' <- rowMeans(all_protein[,c(26:31)])
+    all_protein_means$'Prot meanArea HCAEC DPBS' <- rowMeans(all_protein[,c(32:34)])
+    all_protein_means$'Prot meanArea HCAEC MPP' <- rowMeans(all_protein[,c(35:37)])
+    all_protein_means$'Prot meanArea HCAEC (DPBS + MPP)' <- rowMeans(all_protein[,c(32:37)])
+    all_protein_means$'Prot meanArea HITAEC CPP-P' <- rowMeans(all_protein[,c(38:40)])
+    all_protein_means$'Prot meanArea HITAEC CPP-S' <- rowMeans(all_protein[,c(41:43)])
+    all_protein_means$'Prot meanArea HITAEC (CPP-P + CPP-S)' <- rowMeans(all_protein[,c(38:43)])
+    all_protein_means$'Prot meanArea HITAEC DPBS' <- rowMeans(all_protein[,c(44:46)])
+    all_protein_means$'Prot meanArea HITAEC MPP' <- rowMeans(all_protein[,c(47:49)])
+    all_protein_means$'Prot meanArea HITAEC (DPBS + MPP)' <- rowMeans(all_protein[,c(44:49)])
     all_protein_means$'Prot meanArea' <- rowMeans(all_protein[,c(26:49)])
-  
+  }
+    
+  {  
   all_heatmap_means <- all_heatmap[,c(1:3)]
-    all_heatmap_means$'Secr meanArea HCA C+I' <- rowMeans(all_heatmap[,c(4:9)])
-    all_heatmap_means$'Secr meanArea HCA K+M' <- rowMeans(all_heatmap[,c(10:13)])
-    all_heatmap_means$'Secr meanArea HIT C+I' <- rowMeans(all_heatmap[,c(14:19)])
-    all_heatmap_means$'Secr meanArea HIT K+M' <- rowMeans(all_heatmap[,c(20:25)])
+    all_heatmap_means$'Secr meanArea HCAEC (CPP-P + CPP-S)' <- rowMeans(all_heatmap[,c(4:9)])
+    all_heatmap_means$'Secr meanArea HCAEC (DPBS + MPP)' <- rowMeans(all_heatmap[,c(10:13)])
+    all_heatmap_means$'Secr meanArea HITAEC (CPP-P + CPP-S)' <- rowMeans(all_heatmap[,c(14:19)])
+    all_heatmap_means$'Secr meanArea HITAEC (DPBS + MPP)' <- rowMeans(all_heatmap[,c(20:25)])
     all_heatmap_means$'Secr meanArea' <- rowMeans(all_heatmap[,c(4:25)])
-    all_heatmap_means$'Prot meanArea HCA C+I' <- rowMeans(all_heatmap[,c(26:31)])
-    all_heatmap_means$'Prot meanArea HCA K+M' <- rowMeans(all_heatmap[,c(32:37)])
-    all_heatmap_means$'Prot meanArea HIT C+I' <- rowMeans(all_heatmap[,c(38:43)])
-    all_heatmap_means$'Prot meanArea HIT K+M' <- rowMeans(all_heatmap[,c(44:49)])
+    all_heatmap_means$'Prot meanArea HCAEC (CPP-P + CPP-S)' <- rowMeans(all_heatmap[,c(26:31)])
+    all_heatmap_means$'Prot meanArea HCAEC (DPBS + MPP)' <- rowMeans(all_heatmap[,c(32:37)])
+    all_heatmap_means$'Prot meanArea HITAEC (CPP-P + CPP-S)' <- rowMeans(all_heatmap[,c(38:43)])
+    all_heatmap_means$'Prot meanArea HITAEC (DPBS + MPP)' <- rowMeans(all_heatmap[,c(44:49)])
     all_heatmap_means$'Prot meanArea' <- rowMeans(all_heatmap[,c(26:49)])
+  }
+  
   
   #Average expression
      
@@ -627,8 +650,8 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
     
     colnames(all_secr_AE) <- c('Gene name',
                                        'Protein',
-                                       'AE HCA C 2','AE HCA C 4','AE HCA C 6','AE HCA I 2','AE HCA I 4','AE HCA I 6','AE HCA K 2','AE HCA K 4','AE HCA M 2','AE HCA M 6',
-                                       'AE HIT C 2','AE HIT C 4','AE HIT C 6','AE HIT I 2','AE HIT I 4','AE HIT I 6','AE HIT K 2','AE HIT K 4','AE HIT K 6','AE HIT M 2','AE HIT M 4','AE HIT M 6')
+                                       'AE HCAEC CPP-P 2','AE HCAEC CPP-P 4','AE HCAEC CPP-P 6','AE HCAEC CPP-S 2','AE HCAEC CPP-S 4','AE HCAEC CPP-S 6','AE HCAEC DPBS 2','AE HCAEC DPBS 4','AE HCAEC MPP 2','AE HCAEC MPP 6',
+                                       'AE HITAEC CPP-P 2','AE HITAEC CPP-P 4','AE HITAEC CPP-P 6','AE HITAEC CPP-S 2','AE HITAEC CPP-S 4','AE HITAEC CPP-S 6','AE HITAEC DPBS 2','AE HITAEC DPBS 4','AE HITAEC DPBS 6','AE HITAEC MPP 2','AE HITAEC MPP 4','AE HITAEC MPP 6')
 
   all_prot_AE <- 0
     dat2_proteome <- Uniq_prot_proteome[,c(2,6:29)]
@@ -647,83 +670,193 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
   
     colnames(all_prot_AE) <- c('Gene name',
                                       'Protein',
-                                      'AE HCA C 2','AE HCA C 4','AE HCA C 6','AE HCA I 2','AE HCA I 4','AE HCA I 6','AE HCA K 2','AE HCA K 4','AE HCA K 6','AE HCA M 2','AE HCA M 4','AE HCA M 6',
-                                      'AE HIT C 2','AE HIT C 4','AE HIT C 6','AE HIT I 2','AE HIT I 4','AE HIT I 6','AE HIT K 2','AE HIT K 4','AE HIT K 6','AE HIT M 2','AE HIT M 4','AE HIT M 6')
+                                      'AE HCAEC CPP-P 2','AE HCAEC CPP-P 4','AE HCAEC CPP-P 6','AE HCAEC CPP-S 2','AE HCAEC CPP-S 4','AE HCAEC CPP-S 6','AE HCAEC DPBS 2','AE HCAEC DPBS 4','AE HCAEC DPBS 6','AE HCAEC MPP 2','AE HCAEC MPP 4','AE HCAEC MPP 6',
+                                      'AE HITAEC CPP-P 2','AE HITAEC CPP-P 4','AE HITAEC CPP-P 6','AE HITAEC CPP-S 2','AE HITAEC CPP-S 4','AE HITAEC CPP-S 6','AE HITAEC DPBS 2','AE HITAEC DPBS 4','AE HITAEC DPBS 6','AE HITAEC MPP 2','AE HITAEC MPP 4','AE HITAEC MPP 6')
                                       
   all_AE_SandP <- merge(all_secr_AE, all_prot_AE, by = c('Gene name','Protein'))
   
   AE_heatmap <- all_AE_SandP[all_AE_SandP$Protein %in% prot_heatmap,]
   
+  {
   means_AE_secr <- all_secr_AE[1:2]
-    means_AE_secr$'MeanAE HCA C' <- rowMeans(all_secr_AE[,c(3:5)])
-    means_AE_secr$'MeanAE HCA I' <- rowMeans(all_secr_AE[,c(6:8)])
-    means_AE_secr[['MeanAE HCA C+I']] <- rowMeans(all_secr_AE[,c(3:8)])
-    means_AE_secr$'MeanAE HCA K' <- rowMeans(all_secr_AE[,c(9:10)])
-    means_AE_secr$'MeanAE HCA M' <- rowMeans(all_secr_AE[,c(11:12)])
-    means_AE_secr[['MeanAE HCA K+M']] <- rowMeans(all_secr_AE[,c(9:12)])
-    means_AE_secr$'MeanAE HIT C' <- rowMeans(all_secr_AE[,c(13:15)])
-    means_AE_secr$'MeanAE HIT I' <- rowMeans(all_secr_AE[,c(16:18)])
-    means_AE_secr[['MeanAE HIT C+I']] <-rowMeans(all_secr_AE[,c(13:18)])
-    means_AE_secr$'MeanAE HIT K' <- rowMeans(all_secr_AE[,c(19:21)])
-    means_AE_secr$'MeanAE HIT M' <- rowMeans(all_secr_AE[,c(22:24)])
-    means_AE_secr[['MeanAE HIT K+M']] <-rowMeans(all_secr_AE[,c(19:24)])
-  
+    means_AE_secr$'MeanAE HCAEC CPP-P' <- rowMeans(all_secr_AE[,c(3:5)])
+    means_AE_secr$'MeanAE HCAEC CPP-S' <- rowMeans(all_secr_AE[,c(6:8)])
+    means_AE_secr[['MeanAE HCAEC (CPP-P + CPP-S)']] <- rowMeans(all_secr_AE[,c(3:8)])
+    means_AE_secr$'MeanAE HCAEC DPBS' <- rowMeans(all_secr_AE[,c(9:10)])
+    means_AE_secr$'MeanAE HCAEC MPP' <- rowMeans(all_secr_AE[,c(11:12)])
+    means_AE_secr[['MeanAE HCAEC (DPBS + MPP)']] <- rowMeans(all_secr_AE[,c(9:12)])
+    means_AE_secr$'MeanAE HITAEC CPP-P' <- rowMeans(all_secr_AE[,c(13:15)])
+    means_AE_secr$'MeanAE HITAEC CPP-S' <- rowMeans(all_secr_AE[,c(16:18)])
+    means_AE_secr[['MeanAE HITAEC (CPP-P + CPP-S)']] <-rowMeans(all_secr_AE[,c(13:18)])
+    means_AE_secr$'MeanAE HITAEC DPBS' <- rowMeans(all_secr_AE[,c(19:21)])
+    means_AE_secr$'MeanAE HITAEC MPP' <- rowMeans(all_secr_AE[,c(22:24)])
+    means_AE_secr[['MeanAE HITAEC (DPBS + MPP)']] <-rowMeans(all_secr_AE[,c(19:24)])
+  }
+    
+  {
   means_AE_prot <- all_prot_AE[1:2]
-    means_AE_prot$'MeanAE HCA C' <- rowMeans(all_prot_AE[,c(3:5)])
-    means_AE_prot$'MeanAE HCA I' <- rowMeans(all_prot_AE[,c(6:8)])
-    means_AE_prot[['MeanAE HCA C+I']] <- rowMeans(all_prot_AE[,c(3:8)])
-    means_AE_prot$'MeanAE HCA K' <- rowMeans(all_prot_AE[,c(9:11)])
-    means_AE_prot$'MeanAE HCA M' <- rowMeans(all_prot_AE[,c(12:14)])
-    means_AE_prot[['MeanAE HCA K+M']] <- rowMeans(all_prot_AE[,c(9:14)])
-    means_AE_prot$'MeanAE HIT C' <- rowMeans(all_prot_AE[,c(15:17)])
-    means_AE_prot$'MeanAE HIT I' <- rowMeans(all_prot_AE[,c(18:20)])
-    means_AE_prot[['MeanAE HIT C+I']] <-rowMeans(all_prot_AE[,c(15:20)])
-    means_AE_prot$'MeanAE HIT K' <- rowMeans(all_prot_AE[,c(21:23)])
-    means_AE_prot$'MeanAE HIT M' <- rowMeans(all_prot_AE[,c(24:26)])
-    means_AE_prot[['MeanAE HIT K+M']] <-rowMeans(all_prot_AE[,c(21:26)])
-  
-    
+    means_AE_prot$'MeanAE HCAEC CPP-P' <- rowMeans(all_prot_AE[,c(3:5)])
+    means_AE_prot$'MeanAE HCAEC CPP-S' <- rowMeans(all_prot_AE[,c(6:8)])
+    means_AE_prot[['MeanAE HCAEC (CPP-P + CPP-S)']] <- rowMeans(all_prot_AE[,c(3:8)])
+    means_AE_prot$'MeanAE HCAEC DPBS' <- rowMeans(all_prot_AE[,c(9:11)])
+    means_AE_prot$'MeanAE HCAEC MPP' <- rowMeans(all_prot_AE[,c(12:14)])
+    means_AE_prot[['MeanAE HCAEC (DPBS + MPP)']] <- rowMeans(all_prot_AE[,c(9:14)])
+    means_AE_prot$'MeanAE HITAEC CPP-P' <- rowMeans(all_prot_AE[,c(15:17)])
+    means_AE_prot$'MeanAE HITAEC CPP-S' <- rowMeans(all_prot_AE[,c(18:20)])
+    means_AE_prot[['MeanAE HITAEC (CPP-P + CPP-S)']] <-rowMeans(all_prot_AE[,c(15:20)])
+    means_AE_prot$'MeanAE HITAEC DPBS' <- rowMeans(all_prot_AE[,c(21:23)])
+    means_AE_prot$'MeanAE HITAEC MPP' <- rowMeans(all_prot_AE[,c(24:26)])
+    means_AE_prot[['MeanAE HITAEC (DPBS + MPP)']] <-rowMeans(all_prot_AE[,c(21:26)])
+  }
+   
+  { 
   means_AE_SandP <- all_AE_SandP[,c(1:2)]
-    means_AE_SandP$'Secr MeanAE HCA C' <- rowMeans(all_AE_SandP[,c(3:5)])
-    means_AE_SandP$'Secr MeanAE HCA I' <- rowMeans(all_AE_SandP[,c(6:8)])
-    means_AE_SandP$'Secr MeanAE HCA C+I' <- rowMeans(all_AE_SandP[,c(3:8)])
-    means_AE_SandP$'Secr MeanAE HCA K' <- rowMeans(all_AE_SandP[,c(9:10)])
-    means_AE_SandP$'Secr MeanAE HCA M' <- rowMeans(all_AE_SandP[,c(11:12)])
-    means_AE_SandP$'Secr MeanAE HCA K+M' <- rowMeans(all_AE_SandP[,c(9:12)])
-    means_AE_SandP$'Secr MeanAE HIT C' <- rowMeans(all_AE_SandP[,c(13:15)])
-    means_AE_SandP$'Secr MeanAE HIT I' <- rowMeans(all_AE_SandP[,c(16:18)])
-    means_AE_SandP$'Secr MeanAE HIT C+I' <- rowMeans(all_AE_SandP[,c(13:18)])
-    means_AE_SandP$'Secr MeanAE HIT K' <- rowMeans(all_AE_SandP[,c(19:21)])
-    means_AE_SandP$'Secr MeanAE HIT M' <- rowMeans(all_AE_SandP[,c(22:24)])
-    means_AE_SandP$'Secr MeanAE HIT K+M' <- rowMeans(all_AE_SandP[,c(19:24)])
+    means_AE_SandP$'Secr MeanAE HCAEC CPP-P' <- rowMeans(all_AE_SandP[,c(3:5)])
+    means_AE_SandP$'Secr MeanAE HCAEC CPP-S' <- rowMeans(all_AE_SandP[,c(6:8)])
+    means_AE_SandP$'Secr MeanAE HCAEC (CPP-P + CPP-S)' <- rowMeans(all_AE_SandP[,c(3:8)])
+    means_AE_SandP$'Secr MeanAE HCAEC DPBS' <- rowMeans(all_AE_SandP[,c(9:10)])
+    means_AE_SandP$'Secr MeanAE HCAEC MPP' <- rowMeans(all_AE_SandP[,c(11:12)])
+    means_AE_SandP$'Secr MeanAE HCAEC (DPBS + MPP)' <- rowMeans(all_AE_SandP[,c(9:12)])
+    means_AE_SandP$'Secr MeanAE HITAEC CPP-P' <- rowMeans(all_AE_SandP[,c(13:15)])
+    means_AE_SandP$'Secr MeanAE HITAEC CPP-S' <- rowMeans(all_AE_SandP[,c(16:18)])
+    means_AE_SandP$'Secr MeanAE HITAEC (CPP-P + CPP-S)' <- rowMeans(all_AE_SandP[,c(13:18)])
+    means_AE_SandP$'Secr MeanAE HITAEC DPBS' <- rowMeans(all_AE_SandP[,c(19:21)])
+    means_AE_SandP$'Secr MeanAE HITAEC MPP' <- rowMeans(all_AE_SandP[,c(22:24)])
+    means_AE_SandP$'Secr MeanAE HITAEC (DPBS + MPP)' <- rowMeans(all_AE_SandP[,c(19:24)])
     means_AE_SandP$'Secr MeanAE' <- rowMeans(all_AE_SandP[,c(3:24)])
-    means_AE_SandP$'Prot MeanAE HCA C' <- rowMeans(all_AE_SandP[,c(25:27)])
-    means_AE_SandP$'Prot MeanAE HCA I' <- rowMeans(all_AE_SandP[,c(28:30)])
-    means_AE_SandP$'Prot MeanAE HCA C+I' <- rowMeans(all_AE_SandP[,c(25:30)])
-    means_AE_SandP$'Prot MeanAE HCA K' <- rowMeans(all_AE_SandP[,c(31:33)])
-    means_AE_SandP$'Prot MeanAE HCA M' <- rowMeans(all_AE_SandP[,c(34:36)])
-    means_AE_SandP$'Prot MeanAE HCA K+M' <- rowMeans(all_AE_SandP[,c(31:36)])
-    means_AE_SandP$'Prot MeanAE HIT C' <- rowMeans(all_AE_SandP[,c(37:39)])
-    means_AE_SandP$'Prot MeanAE HIT I' <- rowMeans(all_AE_SandP[,c(40:42)])
-    means_AE_SandP$'Prot MeanAE HIT C+I' <- rowMeans(all_AE_SandP[,c(37:42)])
-    means_AE_SandP$'Prot MeanAE HIT K' <- rowMeans(all_AE_SandP[,c(43:45)])
-    means_AE_SandP$'Prot MeanAE HIT M' <- rowMeans(all_AE_SandP[,c(46:48)])
-    means_AE_SandP$'Prot MeanAE HIT K+M' <- rowMeans(all_AE_SandP[,c(43:48)])
+    means_AE_SandP$'Prot MeanAE HCAEC CPP-P' <- rowMeans(all_AE_SandP[,c(25:27)])
+    means_AE_SandP$'Prot MeanAE HCAEC CPP-S' <- rowMeans(all_AE_SandP[,c(28:30)])
+    means_AE_SandP$'Prot MeanAE HCAEC (CPP-P + CPP-S)' <- rowMeans(all_AE_SandP[,c(25:30)])
+    means_AE_SandP$'Prot MeanAE HCAEC DPBS' <- rowMeans(all_AE_SandP[,c(31:33)])
+    means_AE_SandP$'Prot MeanAE HCAEC MPP' <- rowMeans(all_AE_SandP[,c(34:36)])
+    means_AE_SandP$'Prot MeanAE HCAEC (DPBS + MPP)' <- rowMeans(all_AE_SandP[,c(31:36)])
+    means_AE_SandP$'Prot MeanAE HITAEC CPP-P' <- rowMeans(all_AE_SandP[,c(37:39)])
+    means_AE_SandP$'Prot MeanAE HITAEC CPP-S' <- rowMeans(all_AE_SandP[,c(40:42)])
+    means_AE_SandP$'Prot MeanAE HITAEC (CPP-P + CPP-S)' <- rowMeans(all_AE_SandP[,c(37:42)])
+    means_AE_SandP$'Prot MeanAE HITAEC DPBS' <- rowMeans(all_AE_SandP[,c(43:45)])
+    means_AE_SandP$'Prot MeanAE HITAEC MPP' <- rowMeans(all_AE_SandP[,c(46:48)])
+    means_AE_SandP$'Prot MeanAE HITAEC (DPBS + MPP)' <- rowMeans(all_AE_SandP[,c(43:48)])
     means_AE_SandP$'Prot MeanAE' <- rowMeans(all_AE_SandP[,c(25:48)])
-  
-  means_AE_heatmap <- AE_heatmap[,c(1:2)]
-    means_AE_heatmap$'Secr meanAE HCA C+I' <- rowMeans(AE_heatmap[,c(3:8)])
-    means_AE_heatmap$'Secr meanAE HCA K+M' <- rowMeans(AE_heatmap[,c(9:12)])
-    means_AE_heatmap$'Secr meanAE HIT C+I' <- rowMeans(AE_heatmap[,c(13:18)])
-    means_AE_heatmap$'Secr meanAE HIT K+M' <- rowMeans(AE_heatmap[,c(19:24)])
-    means_AE_heatmap$'Secr meanAE' <- rowMeans(AE_heatmap[,c(3:24)])
-    means_AE_heatmap$'Prot meanAE HCA C+I' <- rowMeans(AE_heatmap[,c(25:30)])
-    means_AE_heatmap$'Prot meanAE HCA K+M' <- rowMeans(AE_heatmap[,c(31:36)])
-    means_AE_heatmap$'Prot meanAE HIT C+I' <- rowMeans(AE_heatmap[,c(37:42)])
-    means_AE_heatmap$'Prot meanAE HIT K+M' <- rowMeans(AE_heatmap[,c(43:48)])
-    means_AE_heatmap$'Prot meanAE' <- rowMeans(AE_heatmap[,c(43:48)])
+  }
     
-#write data in excel book
+  {
+  means_AE_heatmap <- AE_heatmap[,c(1:2)]
+    means_AE_heatmap$'Secr meanAE HCAEC (CPP-P + CPP-S)' <- rowMeans(AE_heatmap[,c(3:8)])
+    means_AE_heatmap$'Secr meanAE HCAEC (DPBS + MPP)' <- rowMeans(AE_heatmap[,c(9:12)])
+    means_AE_heatmap$'Secr meanAE HITAEC (CPP-P + CPP-S)' <- rowMeans(AE_heatmap[,c(13:18)])
+    means_AE_heatmap$'Secr meanAE HITAEC (DPBS + MPP)' <- rowMeans(AE_heatmap[,c(19:24)])
+    means_AE_heatmap$'Secr meanAE' <- rowMeans(AE_heatmap[,c(3:24)])
+    means_AE_heatmap$'Prot meanAE HCAEC (CPP-P + CPP-S)' <- rowMeans(AE_heatmap[,c(25:30)])
+    means_AE_heatmap$'Prot meanAE HCAEC (DPBS + MPP)' <- rowMeans(AE_heatmap[,c(31:36)])
+    means_AE_heatmap$'Prot meanAE HITAEC (CPP-P + CPP-S)' <- rowMeans(AE_heatmap[,c(37:42)])
+    means_AE_heatmap$'Prot meanAE HITAEC (DPBS + MPP)' <- rowMeans(AE_heatmap[,c(43:48)])
+    means_AE_heatmap$'Prot meanAE' <- rowMeans(AE_heatmap[,c(43:48)])
+  }
+
+#heatmaps top50 of overexpression proteins in ctrl and experimental groups in HITAEC and HCAEC
+  
+    prot_top50_HCA_KM <- rownames(head(means_AE_secr[order(means_AE_secr$`MeanAE HCAEC (DPBS + MPP)`,decreasing = T),],n=50))
+    length(prot_top50_HCA_KM)
+    
+    prot_top50_HCA_CI <- rownames(head(means_AE_secr[order(means_AE_secr$`MeanAE HCAEC (CPP-P + CPP-S)`,decreasing = T),],n=50))
+    length(prot_top50_HCA_CI)
+    
+    prot_top50_HIT_KM <- rownames(head(means_AE_secr[order(means_AE_secr$`MeanAE HITAEC (DPBS + MPP)`,decreasing = T),],n=50))
+    length(prot_top50_HIT_KM)
+    
+    prot_top50_HIT_CI <- rownames(head(means_AE_secr[order(means_AE_secr$`MeanAE HITAEC (CPP-P + CPP-S)`,decreasing = T),],n=50))
+    length(prot_top50_HIT_CI)
+    
+pheatmap(dat_norm2[prot_top50_HCA_KM,c(1:4)],
+         annotation_col = fact[,c(2,5)],
+         cutree_cols = 2,
+         cluster_cols = FALSE,
+         cluster_rows = F,
+         cellwidth = 12,
+         cellheight = 10,
+         border_color = "black",
+         breaks = seq(18.5, 24, length.out = 101),
+         color = colorRampPalette(c("#00bfff", '#005aeb', '#240935', '#800080','#cd00cd',"#ff19ff"))(100))
+
+pheatmap(dat_norm2[prot_top50_HCA_CI,c(11:16)],
+         annotation_col = fact[,c(2,5)],
+         cutree_cols = 2,
+         cluster_cols = FALSE,
+         cluster_rows = F,
+         cellwidth = 12,
+         cellheight = 10,
+         border_color = "black",
+         breaks = seq(18.5, 24, length.out = 101),
+         color = colorRampPalette(c("#00bfff", '#005aeb', '#240935', '#800080','#cd00cd',"#ff19ff"))(100))
+
+pheatmap(dat_norm2[prot_top50_HIT_KM,c(5:10)],
+         annotation_col = fact[,c(2,5)],
+         cutree_cols = 2,
+         cluster_cols = FALSE,
+         cluster_rows = F,
+         cellwidth = 12,
+         cellheight = 10,
+         border_color = "black",
+         breaks = seq(18.5, 24, length.out = 101),
+         color = colorRampPalette(c("#00bfff", '#005aeb', '#240935', '#800080','#cd00cd',"#ff19ff"))(100))
+
+pheatmap(dat_norm2[prot_top50_HIT_CI,c(17:22)],
+         annotation_col = fact[,c(2,5)],
+         cutree_cols = 2,
+         cluster_cols = FALSE,
+         cluster_rows = F,
+         cellwidth = 12,
+         cellheight = 10,
+         border_color = "black",
+         breaks = seq(18.5, 24, length.out = 101),
+         color = colorRampPalette(c("#00bfff", '#005aeb', '#240935', '#800080','#cd00cd',"#ff19ff"))(100))
+
+    
+#write data in excel book (suppl datafile 17 - unique proteins)
+
+
+  Datafile_17 <- createWorkbook()
+  
+  addWorksheet(Datafile_17, "HCAEC (DPBS + MPP)")
+  writeData(Datafile_17, "HCAEC (DPBS + MPP)", Uniq_prot_secretome_ctrl_HCA)
+  
+  addWorksheet(Datafile_17, "HITAEC (DPBS + MPP)")
+  writeData(Datafile_17, "HITAEC (DPBS + MPP)", Uniq_prot_secretome_ctrl_HIT)
+  
+  addWorksheet(Datafile_17, "(DPBS + MPP) - HCAEC vs HITAEC")
+  writeData(Datafile_17, "(DPBS + MPP) - HCAEC vs HITAEC", Uniq_prot_secretome_HCA_ctrl_vs_HIT_ctrl)
+  
+  addWorksheet(Datafile_17, "HCAEC (CPP-P + CPP-S)")
+  writeData(Datafile_17, "HCAEC (CPP-P + CPP-S)", Uniq_prot_secretome_exp_HCA)
+  
+  addWorksheet(Datafile_17, "HITAEC (CPP-P + CPP-S)")
+  writeData(Datafile_17, "HITAEC (CPP-P + CPP-S)", Uniq_prot_secretome_exp_HIT)
+  
+  addWorksheet(Datafile_17, "(DPBS + MPP) - HITAEC vs HCAEC")
+  writeData(Datafile_17, "(DPBS + MPP) - HITAEC vs HCAEC", Uniq_prot_secretome_HIT_ctrl_vs_HCA_ctrl)
+  
+  saveWorkbook(Datafile_17, file = "Supplementary Datafile 17 (Unique proteins).xlsx", overwrite = TRUE)
+
+
+#write data in excel book (suppl datafile 15 - analysis of areas)
+
+  Datafile_15 <- createWorkbook()
+  
+  addWorksheet(Datafile_15, "Raw") #all areas & counts for secretome
+  writeData(Datafile_15, "Raw", Uniq_prot_secretome)
+  
+  addWorksheet(Datafile_15, "Analysis") #means for peak areas to secretome
+  writeData(Datafile_15, "Analysis", Uniq_prot_areas_secretome)
+  
+  addWorksheet(Datafile_15, "Range") #46 of proteins, which were selected for heatmap
+  writeData(Datafile_15, "Range", all_heatmap[,c(1:25)])
+  
+  addWorksheet(Datafile_15, "Range anal") #intergroup means on Range
+  writeData(Datafile_15, "Range anal", all_heatmap_means[,c(1:8)])
+  
+  saveWorkbook(Datafile_15, file = "Supplementary Datafile 15 (secretome across the samples).xlsx", overwrite = TRUE)
+
+#write data in excel FULL book
     
   Unique_proteins <- createWorkbook()
   
@@ -796,6 +929,6 @@ pheatmap(dat2_2[prot_for_heatmap,], #main heatmap which was builded on base area
   addWorksheet(Unique_proteins, "Secr Ctrl HIT vs Ctrl HCA")
   writeData(Unique_proteins, "Secr Ctrl HIT vs Ctrl HCA", Uniq_prot_secretome_HIT_ctrl_vs_HCA_ctrl)
   
-  saveWorkbook(Unique_proteins, file = "Unique_proteins_sec+prot_v3.xlsx", overwrite = TRUE)
+  saveWorkbook(Unique_proteins, file = "Unique_proteins_sec+prot.xlsx", overwrite = TRUE)
   
   

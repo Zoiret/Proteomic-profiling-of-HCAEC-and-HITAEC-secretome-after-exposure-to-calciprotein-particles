@@ -31,7 +31,7 @@ fact <- data.frame(read_excel("sample_info_131-135_vs_142-147.xlsx"))
   fact$Donor <- as.factor(fact$Donor)
   fact$Donor
   
-  fact$group <- substr(fact$Original.index, 1, 1) #workmane of group incubation conditions
+  fact$group <- substr(fact$Original.index, 1, 1) #workname of group incubation conditions
   fact$group <- as.factor(fact$group)
   
   fact$group_2 <- paste(fact$Differentiation, fact$group, sep = "_") #workname in registry without number
@@ -125,7 +125,7 @@ dat <- data.frame(read.delim("proteins_131-153.tsv"))
   HCA_K <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,group_2=="HCA_K"))])) >= 0.5), ]
   HCA_M <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,group_2=="HCA_M"))])) >= 0.5), ]
   HIT_K <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,group_2=="HIT_K"))])) >= 0.5), ]
-  HIT_M <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,group_2=="HIT_K"))])) >= 0.5), ]
+  HIT_M <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,group_2=="HIT_M"))])) >= 0.5), ]
   
   HCA <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,Differentiation=="HCA"))])) >= 0.5), ]
   HIT <- dat1[which(rowMeans(!is.na(dat1[,rownames(subset(fact,Differentiation=="HIT"))])) >= 0.5), ]
@@ -351,5 +351,37 @@ pheatmap(dat_norm2[p_above_FC_top_for_heatmap,],
 
   min(dat_norm2[p_above_FC_top_for_heatmap,])
   max(dat_norm2[p_above_FC_top_for_heatmap,])
+
   
+#volcano plots for heatmap's proteins
   
+  p_above_FC_top_for_heatmap4 <- rownames(head(full_list_efit3[order(full_list_efit3$logFC,decreasing = T),],n=10))
+  p_above_FC_top_for_heatmap4 <- c(p_above_FC_top_for_heatmap4,rownames(tail(full_list_efit3[order(full_list_efit3$logFC,decreasing = T),],n=10)))
+  length(p_above_FC_top_for_heatmap4)
+  
+EnhancedVolcano(full_list_efit, #full volcano plot without names
+                lab = NA,
+                x = 'logFC',
+                y = 'adj.P.Val',
+                pCutoff = 0.05,
+                xlim = c(-2.9, 2), 
+                ylim = c(0, 5.1),
+                FCcutoff = 1,  
+                title ="Vulcano HCA ctrl vs HIT ctrl",
+                labSize = 4.0,
+                boxedLabels = F,
+                colAlpha = 1)
+
+EnhancedVolcano(full_list_efit3[p_above_FC_top_for_heatmap4,], #top10 of gipoexpression, and top10 of overexpression
+                lab = NA, #full_list_efit3[p_above_FC_top_for_heatmap4,][["Gene.name"]], # changeable visibility of names
+                x = 'logFC',
+                y = 'adj.P.Val',
+                pCutoff = 0.05,
+                xlim = c(-2.9, 2), 
+                ylim = c(0, 5.1),
+                FCcutoff = 1,  
+                title ="Vulcano HCA ctrl vs HIT ctrl",
+                labSize = 4.0,
+                boxedLabels = F,
+                colAlpha = 1,
+                col = c('', '', '', '#e600e6'),)
